@@ -1,0 +1,121 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+.signup_wrapper {
+  width: 100%;
+  height: 100vh;
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.divs_wrapper {
+  width: 1185px;
+  height: 707px;
+  display: flex;
+  text-align: center;
+}
+
+.title {
+  width: 50%;
+  padding: 211px 63px;
+  border: 4px solid white;
+  border-radius: 16px 0 0 16px;
+  background-color: #111111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: start;
+}
+
+.title-h1 {
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-weight: 800;
+  font-style: Italic;
+  font-size: 75px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.form {
+  width: 50%;
+  border: 4px solid white;
+  border-radius: 0 16px 16px 0;
+  background-color: #111111;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.form-h2 {
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 38px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+}
+
+.input {
+  width: 346px;
+  height: 30px;
+  border-radius: 10px;
+  border-width: 2px;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  font-family: Poppins;
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 10px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  padding: 16px 8px;
+}
+
+.form-btn {
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  width: 346px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  color: #111111;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+.input {
+  margin: 20px 0;
+}
+
+.link-to-signin {
+  font-family: Poppins;
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 15px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  padding: 28px 0;
+}
+@media (max-width: 1030px) {
+  .form-h2 {
+    padding: 20px 0 0 0;
+  }
+  .divs_wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .title,
+  .form {
+    width: 100%;
+    text-align: center;
+  }
+}
