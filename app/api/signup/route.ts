@@ -1,11 +1,11 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:7000", // default API base URL
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:7000",
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 5000, // optional
+  timeout: 5000,
 });
 
 api.interceptors.request.use((config) => {
