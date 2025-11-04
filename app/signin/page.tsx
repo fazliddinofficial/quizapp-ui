@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import "./signin.css";
+import "../signup/signup.css";
 import Link from "next/link";
 import api from "../api/signup/route";
 import toaster from "../lib/toaster";
@@ -11,8 +12,6 @@ export default function SignIn() {
     phoneNumber: "",
   });
 
-  const [error, setError] = useState("");
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserProps({ ...userProps, [e.target.name]: e.target.value });
   };
@@ -20,7 +19,6 @@ export default function SignIn() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setError("");
     try {
       const response = await api.put("/auth/teacher", userProps);
       toaster.success("Siz tasdiqlandingiz!");
@@ -57,7 +55,6 @@ export default function SignIn() {
               value={userProps.password}
               onChange={handleChange}
             />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
             <button type="submit" className="form-btn">
               Kirish
             </button>
