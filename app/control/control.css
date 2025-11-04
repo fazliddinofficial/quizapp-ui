@@ -50,3 +50,35 @@
   margin: 100px 30px;
   cursor: pointer;
 }
+
+.input {
+  width: 346px;
+  height: 30px;
+  border-radius: 10px;
+  border-width: 2px;
+  color: #111111;
+  border: 2px solid #111111;
+  font-family: Poppins;
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 10px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  padding: 16px 8px;
+  margin: 30px;
+}
+
+.form-btn {
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  width: 346px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  color: #ffffff;
+  background-color: #111111;
+  cursor: pointer;
+  margin: 30px;
+}

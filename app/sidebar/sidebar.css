@@ -40,3 +40,7 @@
 .active {
   background-color: #86868611;
 }
+
+.d-none {
+  display: none;
+}

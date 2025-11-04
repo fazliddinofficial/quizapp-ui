@@ -15,7 +15,7 @@ export default function SideBar() {
 
   return (
     <div className="sidebar_wrapper">
-      <h2 className="sidebar_wrapper-h2">Test Brend</h2>
+      <h2 className="sidebar_wrapper-h2">{"Test Brend".toUpperCase()}</h2>
       <div className="container">
         <nav className="navbar">
           {links.map((link) => (
