@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import SideBar from "./sidebar/page";
+import SideBar from "./sidebar/sidebar";
 
 export default function RootLayout({
   children,
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {shouldShowSidebar && <SideBar />}
+        {/* {shouldShowSidebar && <SideBar />} */}
         {children}
         <Toaster position="top-right" reverseOrder={false} />
       </body>
