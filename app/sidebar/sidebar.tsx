@@ -1,24 +1,33 @@
+"use client";
 import Link from "next/link";
 import "./sidebar.css";
+import { usePathname } from "next/navigation";
 
 export default function SideBar() {
+  const pathname = usePathname();
+
+  const links = [
+    { href: "/profile", label: "Profile" },
+    { href: "/control", label: "Boshqaruv" },
+    { href: "/boshqaruv", label: "O'quvchilar" },
+    { href: "/arxiv", label: "Arxiv" },
+  ];
+
   return (
     <div className="sidebar_wrapper">
       <h2 className="sidebar_wrapper-h2">Test Brend</h2>
       <div className="container">
         <nav className="navbar">
-          <div className="navbar-link">
-            <Link href="/profile">Profile</Link>
-          </div>
-          <div className="navbar-link">
-            <Link href="/Boshqaruv">Boshqaruv</Link>
-          </div>
-          <div className="navbar-link">
-            <Link href="/boshqaruv">O'quvchilar</Link>
-          </div>
-          <div className="navbar-link">
-            <Link href="/arxiv">Arxiv</Link>
-          </div>
+          {links.map((link) => (
+            <div
+              key={link.href}
+              className={
+                pathname === link.href ? "navbar-link active" : "navbar-link"
+              }
+            >
+              <Link href={link.href}>{link.label}</Link>
+            </div>
+          ))}
         </nav>
       </div>
     </div>

@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 .sidebar_wrapper {
-  width: 338px;
+  width: 19%;
   height: 100vh;
   background-color: #111111;
   text-align: start;
@@ -35,4 +35,8 @@
 .navbar-link:hover {
   background-color: #86868611;
   cursor: pointer;
+}
+
+.active {
+  background-color: #86868611;
 }
