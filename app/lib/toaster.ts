@@ -1,6 +1,6 @@
 import toast, { ToastOptions } from "react-hot-toast";
 
-const toaster = {
+export const toaster = {
   success: (message: string, options?: ToastOptions) => {
     toast.success(message, options);
   },
@@ -12,4 +12,3 @@ const toaster = {
   },
 };
 
-export default toaster;

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./signup.css";
 import Link from "next/link";
 import api from "../api/signup/route";
-import toaster from "../lib/toaster";
+import { toaster } from "../lib/toaster";
 
 export default function SignUp() {
   const [userProps, setUserProps] = useState({

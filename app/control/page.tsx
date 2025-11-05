@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import SideBar from "../sidebar/sidebar";
 import "./control.css";
-import toaster from "../lib/toaster";
+import { toaster } from "../lib/toaster";
 import api from "../api/signup/route";
 import { useRouter } from "next/navigation";
 
@@ -16,7 +16,9 @@ export default function ControlPage() {
     try {
       const response = await api.post("/quiz", quiz);
       toaster.success("Quiz yaratildi!");
-      router.push(`/question?quizId=${response.data._id}`);
+      router.push(
+        `/question?quizId=${response.data._id}&type=${response.data.quizType}`
+      );
     } catch (error: any) {
       toaster.error(
         "Quiz yaratishda hatolik! " + error.response?.data?.message
