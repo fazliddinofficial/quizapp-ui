@@ -8,49 +8,35 @@
   justify-content: center;
 }
 
-.create_question_wrapper-h2 {
-  font-family: Poppins;
-  font-weight: 700;
-  font-style: Bold;
-  font-size: 35px;
-  line-height: 100%;
-  letter-spacing: 0%;
-  text-align: center;
-  vertical-align: middle;
-  color: #ffffff;
-  background-color: #111111;
-  width: 78%;
-  height: 89px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 30px;
-}
-
 .create_question_wrapper-div {
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
-.question-input {
-  width: 100%;
-  height: 65px;
-  border-radius: 10px;
-  border: 2px solid #ffffff;
+.create_question_wrapper-h2 {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 35px;
+  line-height: 100%;
+  text-align: center;
   color: #ffffff;
-  outline: none;
-  font-size: 24px;
-  padding: 6px;
-  margin: 10px 0 20px;
+  background-color: #111111;
+  width: 78%;
+  min-height: 79px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  margin-top: 10px;
 }
 
 .question-form_wrapper {
   border: 1px solid #ffffff;
-  width: 78%;
+  width: 70%;
   height: auto;
   border-radius: 30px;
   margin: 20px 0;
@@ -64,6 +50,22 @@
   justify-content: center;
 }
 
+.question-input {
+  width: 100%;
+  height: 45px;
+  border-radius: 10px;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  outline: none;
+  font-size: 24px;
+  padding: 6px;
+  margin: 10px 0 20px;
+}
+
+.question-form {
+  width: 80%;
+}
+
 .question-form_wrapper-p {
   font-family: Poppins;
   font-weight: 500;
@@ -74,13 +76,9 @@
   margin: 20px 0;
 }
 
-.question-form {
-  width: 80%;
-}
-
 .question-form-button {
   width: 100%;
-  height: 65px;
+  height: 45px;
   background-color: #ffffff;
   color: #111111;
   font-family: Poppins;
@@ -98,7 +96,7 @@
 
 .variant_input_wrapper {
   width: 100%;
-  height: 65px;
+  height: 50px;
   background-color: #111111;
   border-radius: 10px;
   margin: 13px 0 20px;
@@ -111,7 +109,7 @@
   border-radius: 10px 0 0 10px;
   border-right: none;
   outline: none;
-  font-size: 24px;
+  font-size: 20px;
   padding: 6px;
 }
 
@@ -130,11 +128,12 @@
   color: #ffffff;
   background-color: #111111;
   border: 2px solid #ffffff;
+  height: 49px;
 }
 
 .select-item {
   width: 100%;
-  height: 69px;
+  height: 59px;
   outline: none;
   border: 2px solid #a1ffc5;
   border-radius: 13px;
@@ -144,10 +143,10 @@
 
 .select-time-option {
   width: 100%;
-  height: 68px;
+  height: 55px;
   background-color: #111111;
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   text-transform: uppercase;
   font-family: Poppins;
   font-weight: 500;

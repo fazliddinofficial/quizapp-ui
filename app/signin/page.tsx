@@ -5,8 +5,10 @@ import "../signup/signup.css";
 import Link from "next/link";
 import api from "../api/signup/route";
 import { toaster } from "../lib/toaster";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
+  const router = useRouter();
   const [userProps, setUserProps] = useState({
     password: "",
     phoneNumber: "",
@@ -23,6 +25,7 @@ export default function SignIn() {
       const response = await api.put("/auth/teacher", userProps);
       toaster.success("Siz tasdiqlandingiz!");
       localStorage.setItem("token", response.data.token);
+      router.push("/control");
     } catch (e: any) {
       toaster.error(
         "Ro'yhatdan o'tishda hatolik yuz berdi! " + e.response?.data?.message

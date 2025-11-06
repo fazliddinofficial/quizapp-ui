@@ -3,7 +3,6 @@
 .sidebar_wrapper {
   width: 19%;
   height: 100vh;
-  background-color: #111111;
   text-align: start;
 }
 
@@ -43,4 +42,11 @@
 
 .d-none {
   display: none;
+}
+
+.container {
+  position: fixed;
+  width: 19%;
+  height: 100vh;
+  background-color: #111111;
 }

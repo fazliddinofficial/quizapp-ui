@@ -35,11 +35,19 @@ export default function CreateQuestionComponent() {
   };
 
   function addVariant() {
-    if (+variantsArr.length >= 4) {
+    if (variantsArr.length >= 4) {
       toaster.info("4 tadan ko'p variant qo'sha olmaysiz!");
       return;
     }
-    variantsArr.push(lettersArray[variantsArr.length]);
+
+    const nextLetter = lettersArray[variantsArr.length];
+    setQuestionProps({
+      ...questionProps,
+      variants: {
+        ...questionProps.variants,
+        [nextLetter]: "",
+      },
+    });
   }
 
   let quizTypeName: string;
@@ -49,6 +57,7 @@ export default function CreateQuestionComponent() {
   } else {
     quizTypeName = "Jamoaviy";
   }
+
   return (
     <>
       <div className="flex control-page">
@@ -76,7 +85,7 @@ export default function CreateQuestionComponent() {
                 <button
                   className="add-question-form-button question-form-button"
                   type="button"
-                  onClick={() => addVariant()}
+                  onClick={addVariant}
                 >
                   Variant qo'shish +
                 </button>

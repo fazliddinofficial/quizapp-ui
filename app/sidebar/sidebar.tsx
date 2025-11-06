@@ -15,20 +15,22 @@ export default function SideBar() {
 
   return (
     <div className="sidebar_wrapper">
-      <h2 className="sidebar_wrapper-h2">{"Test Brend".toUpperCase()}</h2>
       <div className="container">
-        <nav className="navbar">
-          {links.map((link) => (
-            <div
-              key={link.href}
-              className={
-                pathname === link.href ? "navbar-link active" : "navbar-link"
-              }
-            >
-              <Link href={link.href}>{link.label}</Link>
-            </div>
-          ))}
-        </nav>
+        <h2 className="sidebar_wrapper-h2">{"Test Brend".toUpperCase()}</h2>
+        <div className="container">
+          <nav className="navbar">
+            {links.map((link) => (
+              <div
+                key={link.href}
+                className={
+                  pathname === link.href ? "navbar-link active" : "navbar-link"
+                }
+              >
+                <Link href={link.href}>{link.label}</Link>
+              </div>
+            ))}
+          </nav>
+        </div>
       </div>
     </div>
   );
