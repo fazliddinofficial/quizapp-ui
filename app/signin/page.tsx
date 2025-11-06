@@ -4,7 +4,7 @@ import "./signin.css";
 import "../signup/signup.css";
 import Link from "next/link";
 import api from "../api/signup/route";
-import toaster from "../lib/toaster";
+import { toaster } from "../lib/toaster";
 
 export default function SignIn() {
   const [userProps, setUserProps] = useState({

@@ -3,15 +3,25 @@
 import React, { FormEvent, useState } from "react";
 import { TitleComponent } from "../code/page";
 import { useSearchParams } from "next/navigation";
+import api from "@/app/api/signup/route";
+import { toaster } from "@/app/lib/toaster";
 
 export default function NameComponent() {
   const [name, setName] = useState("");
   const searchParam = useSearchParams();
-  const handleSubmit = (e: FormEvent) => {
+  let sessionCode = searchParam.get("code");
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    //api call
+    try {
+      const request = await api.post("/session/join", {
+        userName: name,
+        code: sessionCode,
+      });
+      toaster.success("Siz quizga qo'shildingiz!");
+    } catch (error: any) {
+      toaster.error(error.response?.data?.message);
+    }
   };
-  const sessionCode = searchParam.get("code");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
