@@ -27,7 +27,7 @@ export default function NameComponent() {
 
       localStorage.setItem("token", request.data.token);
 
-      router.push(`/student/students?sessionId=${request.data.sessionId}`);
+      router.push(`/student/students?sessionId=${request.data.foundSession}`);
 
       toaster.success("Siz quizga qo'shildingiz!");
     } catch (error: any) {
