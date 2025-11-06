@@ -6,7 +6,7 @@ export default function StudentsComponent() {
   return (
     <main className="students_list_card">
       <TitleComponent
-        style={{ width: "70%" }}
+        style={{ width: "60%" }}
         text="Boshlanishiga oz qoldi"
         key={new Date().getTime()}
       />
