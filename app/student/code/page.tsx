@@ -4,8 +4,15 @@ import React, { FormEvent, useState } from "react";
 import "./codePage.css";
 import { useRouter } from "next/navigation";
 
-export function TitleComponent(props: { text: string }) {
-  return <h1 className="code_page_wrapper-h1">{props.text}</h1>;
+export function TitleComponent(props: {
+  text: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <h1 className="code_page_wrapper-h1" style={props.style}>
+      {props.text}
+    </h1>
+  );
 }
 
 export default function CodePage() {
