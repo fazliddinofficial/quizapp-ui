@@ -9,7 +9,7 @@ export default function SideBar() {
   const links = [
     { href: "/profile", label: "Profile" },
     { href: "/control", label: "Boshqaruv" },
-    { href: "/boshqaruv", label: "O'quvchilar" },
+    { href: "/student/students", label: "O'quvchilar" },
     { href: "/arxiv", label: "Arxiv" },
   ];
 

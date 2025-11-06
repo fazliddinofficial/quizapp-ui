@@ -3,9 +3,9 @@ import { useSearchParams } from "next/navigation";
 import SideBar from "../sidebar/sidebar";
 import { useState } from "react";
 import "./question.css";
-import { VariantInput } from "./CInput";
 import { GoChevronDown } from "react-icons/go";
 import { toaster } from "../lib/toaster";
+import api from "../api/signup/route";
 
 export default function CreateQuestionComponent() {
   const lettersArray = ["A", "B", "C", "D"];
@@ -14,6 +14,7 @@ export default function CreateQuestionComponent() {
     text: "",
     variants: { A: "", B: "" },
     correctAnswer: "",
+    variantsArr: [],
   });
 
   const variantsArr = Object.keys(questionProps.variants);
@@ -25,10 +26,29 @@ export default function CreateQuestionComponent() {
     setQuestionProps({ ...questionProps, [e.target.name]: e.target.value });
   };
 
+  const handleVariantChange = (variantKey: string, value: string) => {
+    setQuestionProps({
+      ...questionProps,
+      variants: {
+        ...questionProps.variants,
+        [variantKey]: value,
+      },
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
+      const req = await api.post("/question", { ...questionProps, quizId });
+
+      setQuestionProps({
+        text: "",
+        variants: { A: "", B: "" },
+        correctAnswer: "",
+        variantsArr: [],
+      });
+
+      toaster.success("Savol muvaffaqiyatli yaratildi!");
     } catch (e: any) {
       toaster.error(e.response?.data?.message);
     }
@@ -48,6 +68,10 @@ export default function CreateQuestionComponent() {
         [nextLetter]: "",
       },
     });
+  }
+
+  function handleStartQuiz() {
+    toaster.success("Quiz boshlandi!");
   }
 
   let quizTypeName: string;
@@ -77,10 +101,27 @@ export default function CreateQuestionComponent() {
                     name="text"
                     value={questionProps.text}
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 {variantsArr.map((key, i) => (
-                  <VariantInput letter={key} key={i} />
+                  <div className="variant-input-wrapper" key={i}>
+                    <div className="variant-input-container">
+                      <div className="content-input-wrapper">
+                        <input
+                          className="variant_input_wrapper-input"
+                          type="text"
+                          value={questionProps.variantsArr[i]}
+                          onChange={(e) =>
+                            handleVariantChange(key, e.target.value)
+                          }
+                        />
+                        <span className="variant_input_wrapper-span">
+                          {key}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 ))}
                 <button
                   className="add-question-form-button question-form-button"
@@ -121,6 +162,9 @@ export default function CreateQuestionComponent() {
                 </button>
               </form>
             </div>
+            <button onClick={handleStartQuiz} className="start-button">
+              Oxirgi quizni boshlash
+            </button>
           </div>
         </div>
       </div>

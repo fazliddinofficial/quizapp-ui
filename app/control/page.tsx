@@ -55,7 +55,7 @@ export default function ControlPage() {
           <div className="create-test-form">
             <form action="" onSubmit={handleSubmit}>
               <input
-                className="input"
+                className="create-test-form-input"
                 type="text"
                 placeholder="Quiz uchun nom kiriting"
                 name="title"
