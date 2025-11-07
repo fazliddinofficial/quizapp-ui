@@ -1,15 +1,16 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SideBar from "../sidebar/sidebar";
 import { useState } from "react";
 import "./question.css";
 import { GoChevronDown } from "react-icons/go";
 import { toaster } from "../lib/toaster";
-import api from "../api/signup/route";
+import api from "../api/route";
 
 export default function CreateQuestionComponent() {
   const lettersArray = ["A", "B", "C", "D"];
   const searchParam = useSearchParams();
+  const router = useRouter();
   const [questionProps, setQuestionProps] = useState({
     text: "",
     variants: { A: "", B: "" },
@@ -19,7 +20,6 @@ export default function CreateQuestionComponent() {
 
   const variantsArr = Object.keys(questionProps.variants);
 
-  const quizId = searchParam.get("quizId");
   const quizType = searchParam.get("type");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +36,24 @@ export default function CreateQuestionComponent() {
     });
   };
 
+  const handleStartSession = async () => {
+    const quizId = searchParam.get("quizId");
+    try {
+      const res = await api.post("/session/quiz", { quizId });
+      console.log(res.data);
+      if (res.data.success === true) {
+        toaster.success("Quiz boshlandi!");
+        router.push(
+          `/dashboard/students?sessionId=${res.data.sessionId}&code=${res.data.code}`
+        );
+      }
+    } catch (error: any) {
+      toaster.error(error.response?.data?.message);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
+    const quizId = searchParam.get("quizId");
     e.preventDefault();
     try {
       const req = await api.post("/question", { ...questionProps, quizId });
@@ -68,10 +85,6 @@ export default function CreateQuestionComponent() {
         [nextLetter]: "",
       },
     });
-  }
-
-  function handleStartQuiz() {
-    toaster.success("Quiz boshlandi!");
   }
 
   let quizTypeName: string;
@@ -158,11 +171,11 @@ export default function CreateQuestionComponent() {
                   ))}
                 </ul>
                 <button className="question-form-button" type="submit">
-                  Keyingi Bosqich
+                  Test qo'shish
                 </button>
               </form>
             </div>
-            <button onClick={handleStartQuiz} className="start-button">
+            <button onClick={handleStartSession} className="start-button">
               Oxirgi quizni boshlash
             </button>
           </div>

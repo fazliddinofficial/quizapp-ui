@@ -5,7 +5,7 @@ import StudentsListComponent from "../students-card/students-card-component";
 import "./index.css";
 import { toaster } from "@/app/lib/toaster";
 import { useCallback, useEffect, useState } from "react";
-import api from "@/app/api/signup/route";
+import api from "@/app/api/route";
 import { io, Socket } from "socket.io-client";
 
 export default function StudentsComponent() {
