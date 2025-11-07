@@ -51,9 +51,9 @@
   cursor: pointer;
 }
 
-.input {
+.create-test-form-input {
   width: 346px;
-  height: 30px;
+  height: 49px;
   border-radius: 10px;
   border-width: 2px;
   color: #111111;
@@ -61,7 +61,7 @@
   font-family: Poppins;
   font-weight: 500;
   font-style: Medium;
-  font-size: 10px;
+  font-size: 18px;
   line-height: 100%;
   letter-spacing: 0%;
   vertical-align: middle;

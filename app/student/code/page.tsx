@@ -3,6 +3,7 @@
 import React, { FormEvent, useState } from "react";
 import "./codePage.css";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function TitleComponent(props: {
   text: string;
@@ -51,6 +52,9 @@ export default function CodePage() {
             Kirish
           </button>
         </form>
+        <Link className="code_page_main-link" href="/signup">
+          Ustoz sifatida kirish
+        </Link>
       </div>
     </main>
   );

@@ -2,10 +2,12 @@
 import React, { useState } from "react";
 import "./signup.css";
 import Link from "next/link";
-import api from "../api/signup/route";
+import api from "../api/route";
 import { toaster } from "../lib/toaster";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const router = useRouter();
   const [userProps, setUserProps] = useState({
     firstName: "",
     lastName: "",
@@ -32,8 +34,8 @@ export default function SignUp() {
     try {
       const { verificationPassword, ...data } = userProps;
       const response = await api.post("/auth/teacher", data);
-      toaster.success("Siz ro'yhatdan o'tdingiz!");
-      localStorage.setItem("token", response.data.token);
+      toaster.success("Dasturga kiring!");
+      router.push("/signin");
     } catch (e: any) {
       toaster.error(
         "Ro'yhatdan o'tishda hatolik yuz berdi! " + e.response?.data?.message
