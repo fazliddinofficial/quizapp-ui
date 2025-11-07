@@ -4,7 +4,7 @@ import { TitleComponent } from "../code/page";
 import StudentsListComponent from "../students-card/students-card-component";
 import "./index.css";
 import { toaster } from "@/app/lib/toaster";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "@/app/api/route";
 import { io, Socket } from "socket.io-client";
 
@@ -22,8 +22,8 @@ export default function StudentsComponent() {
     }
 
     try {
-      const response = await api.get(`/session/${sessionId}`);
-      setStudentsArray(response.data.studentsNameArray || []);
+      const response = await api.get(`/session/${sessionId}/students`);
+      setStudentsArray(response.data || []);
     } catch (error: any) {
       toaster.error(error.response?.data?.message || "Serverda nosozlik!");
     }

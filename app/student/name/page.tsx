@@ -8,6 +8,8 @@ import { toaster } from "@/app/lib/toaster";
 import { useRouter } from "next/navigation";
 
 export default function NameComponent() {
+  const uniqueCode = new Date().getTime();
+
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -23,9 +25,10 @@ export default function NameComponent() {
       const request = await api.post("/session/join", {
         userName: name,
         code: sessionCode,
+        uniqueCode,
       });
 
-      localStorage.setItem("token", request.data.token);
+      localStorage.setItem("userId", String(uniqueCode));
 
       router.push(`/student/students?sessionId=${request.data.foundSession}`);
 
@@ -35,9 +38,11 @@ export default function NameComponent() {
       router.push(`/`);
     }
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
+
   return (
     <main className="code_page_main">
       <div className="code_page_wrapper">

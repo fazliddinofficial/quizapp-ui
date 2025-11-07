@@ -6,7 +6,7 @@ import StudentsListComponent from "@/app/student/students-card/students-card-com
 import { useEffect, useState } from "react";
 import { toaster } from "@/app/lib/toaster";
 import api from "@/app/api/route";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function StudentsListDashboardComponent() {
   const params = useSearchParams();
@@ -18,7 +18,7 @@ export default function StudentsListDashboardComponent() {
   async function fetchStudents() {
     try {
       const req = await api.get(`/session/${sessionId}/students`);
-      console.log(req.data);
+      setStudentsList(req.data);
     } catch (error: any) {
       toaster.error(error.response?.data?.message);
     }
