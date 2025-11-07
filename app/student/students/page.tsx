@@ -10,8 +10,9 @@ import { io, Socket } from "socket.io-client";
 
 export default function StudentsComponent() {
   const searchParam = useSearchParams();
-  const [studentsArray, setStudentsArray] = useState([""]);
+  const [studentsArray, setStudentsArray] = useState<string[]>([]);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   const sessionId = searchParam.get("sessionId");
 
@@ -31,11 +32,91 @@ export default function StudentsComponent() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (!sessionId) return;
+
+    const socketInstance = io(
+      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:7000",
+      {
+        transports: ["websocket", "polling"],
+      }
+    );
+
+    socketInstance.on("connect", () => {
+      console.log("✅ Connected to server");
+      setIsConnected(true);
+    });
+
+    socketInstance.on("disconnect", () => {
+      console.log("❌ Disconnected from server");
+      setIsConnected(false);
+    });
+
+    socketInstance.on("connect_error", (error) => {
+      console.error("Connection error:", error);
+      toaster.error("Serverga ulanib boʻlmadi");
+    });
+
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (!socket || !sessionId) return;
+
+    // Join the session room
+    socket.emit("joinSession", sessionId);
+
+    // Listen for new student joined events
+    socket.on("studentJoined", (studentName: string) => {
+      console.log("New student joined:", studentName);
+      setStudentsArray((prev) => {
+        if (prev.includes(studentName)) {
+          return prev;
+        }
+        return [...prev, studentName];
+      });
+      toaster.success(`${studentName} sessiyaga qo'shildi`);
+    });
+
+    // Listen for student left events
+    socket.on("studentLeft", (studentName: string) => {
+      console.log("Student left:", studentName);
+      setStudentsArray((prev) => prev.filter((name) => name !== studentName));
+    });
+
+    // Cleanup listeners
+    return () => {
+      socket.off("studentJoined");
+      socket.off("studentLeft");
+      socket.emit("leaveSession", sessionId);
+    };
+  }, [socket, sessionId]);
 
   return (
     <main className="students_list_card">
       <TitleComponent style={{ width: "60%" }} text="Boshlanishiga oz qoldi" />
+
+      <div
+        className="connection-status"
+        style={{
+          padding: "8px",
+          borderRadius: "16px",
+          marginBottom: "16px",
+          color: "#111111",
+          textAlign: "center",
+          border: "2px solid #111111",
+        }}
+      >
+        Holat: {isConnected ? "Ulangan" : "Ulanmagan"} | O'quvchilar soni:{" "}
+        {studentsArray.length}
+      </div>
+
       <div>
         <StudentsListComponent students={studentsArray} />
       </div>
