@@ -39,18 +39,6 @@ export default function StudentsListDashboardComponent() {
     }
   }, [sessionId]);
 
-  // useEffect(() => {
-  //   if (sessionId) {
-  //     fetchStudents();
-  //   }
-  // }, [sessionId]);
-
-  // useEffect(() => {
-  //   if (sessionId) {
-  //     fetchStudents();
-  //   }
-  // }, [sessionId]);
-
   useEffect(() => {
     if (!socket || !sessionId) return;
 
