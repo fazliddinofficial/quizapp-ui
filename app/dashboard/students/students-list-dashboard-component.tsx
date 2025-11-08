@@ -9,7 +9,6 @@ import { toaster } from "@/lib/toaster";
 import api from "@/lib/api";
 import { useSearchParams } from "next/navigation";
 import { useSocket } from "@/lib/socketContext";
-import { useRouter } from "next/navigation";
 
 interface Student {
   _id: string;
@@ -19,7 +18,6 @@ interface Student {
 
 export default async function StudentsListDashboardComponent() {
   const params = useSearchParams();
-  const router = useRouter();
   const sessionId = params.get("sessionId");
   const [studentsList, setStudentsList] = useState<Student[]>([]);
   const { socket, isConnected } = useSocket();
