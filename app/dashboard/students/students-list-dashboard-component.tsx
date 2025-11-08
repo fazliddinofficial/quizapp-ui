@@ -17,7 +17,7 @@ interface Student {
   uniqueCode: string;
 }
 
-export default function StudentsListDashboardComponent() {
+export default async function StudentsListDashboardComponent() {
   const params = useSearchParams();
   const router = useRouter();
   const sessionId = params.get("sessionId");
