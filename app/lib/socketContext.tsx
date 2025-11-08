@@ -22,7 +22,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const socketInstance = io(
-      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:7000",
+      process.env.BACK_END_URL || "http://localhost:7000",
       {
         transports: ["websocket", "polling"],
       }

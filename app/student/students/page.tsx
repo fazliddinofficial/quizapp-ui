@@ -4,16 +4,15 @@ import { TitleComponent } from "../code/page";
 import StudentsListComponent from "../students-card/students-card-component";
 import "./index.css";
 import { toaster } from "@/app/lib/toaster";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import api from "@/app/api/route";
-import { io, Socket } from "socket.io-client";
+import { useSocket } from "@/app/lib/socketContext";
 import { useRouter } from "next/navigation";
 
 export default function StudentsComponent() {
   const searchParam = useSearchParams();
   const [studentsArray, setStudentsArray] = useState<string[]>([]);
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
+  const { socket, isConnected } = useSocket();
   const router = useRouter();
 
   const sessionId = searchParam.get("sessionId");
@@ -32,82 +31,51 @@ export default function StudentsComponent() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [sessionId]);
-
-  useEffect(() => {
-    if (!sessionId) return;
-
-    const socketInstance = io(process.env.BACK_END_URL, {
-      transports: ["websocket", "polling"],
-      withCredentials: true,
-    });
-
-    socketInstance.on("connect", () => {
-      console.log("✅ Connected to server");
-      setIsConnected(true);
-    });
-
-    socketInstance.on("disconnect", () => {
-      console.log("❌ Disconnected from server");
-      setIsConnected(false);
-    });
-
-    socketInstance.on("connect_error", (error) => {
-      console.error("Connection error:", error);
-      toaster.error("Serverga ulanib boʻlmadi");
-    });
-
-    setSocket(socketInstance);
-
-    return () => {
-      socketInstance.disconnect();
-    };
-  }, [sessionId]);
-
-  useEffect(() => {
-    if (!socket || !sessionId) return;
-
-    // Join the session room
-    socket.emit("joinSession", sessionId);
-
-    // Listen for new student joined events
-    socket.on("studentJoined", (studentName: string) => {
-      console.log("New student joined:", studentName);
-      setStudentsArray((prev) => {
-        if (prev.includes(studentName)) {
-          return prev;
-        }
-        return [...prev, studentName];
-      });
-      toaster.success(`${studentName} sessiyaga qo'shildi`);
-    });
-
-    // Listen for student left events
-    socket.on("studentLeft", (studentName: string) => {
-      console.log("Student left:", studentName);
-      setStudentsArray((prev) => prev.filter((name) => name !== studentName));
-    });
-
-    // Cleanup listeners
-    return () => {
-      socket.off("studentJoined");
-      socket.off("studentLeft");
-      socket.emit("leaveSession", sessionId);
-    };
-  }, [socket, sessionId]);
-  useEffect(() => {
-    if (!socket) return;
-    socket.on("quizStarted", (data) => {
-      toaster.success(data.message);
+  const handleQuizStarted = useCallback(
+    (data: any) => {
+      console.log("🎯 Quiz started received:", data);
+      toaster.success("Quiz boshlandi!");
       router.push(`/question/start?sessionId=${data.sessionId}`);
-    });
+    },
+    [router]
+  );
+
+  const handleStudentJoined = useCallback((studentName: string) => {
+    setStudentsArray((prev) =>
+      prev.includes(studentName) ? prev : [...prev, studentName]
+    );
+    toaster.success(`${studentName} sessiyaga qo'shildi`);
+  }, []);
+
+  const handleStudentLeft = useCallback((studentName: string) => {
+    setStudentsArray((prev) => prev.filter((name) => name !== studentName));
+  }, []);
+
+  useEffect(() => {
+    if (!socket || !sessionId || !isConnected) return;
+
+    fetchData();
+
+    socket.emit("joinSession", { sessionId });
+
+    socket.on("quizStarted", handleQuizStarted);
+    socket.on("studentJoined", handleStudentJoined);
+    socket.on("studentLeft", handleStudentLeft);
 
     return () => {
-      socket.off("quizStarted");
+      socket.off("quizStarted", handleQuizStarted);
+      socket.off("studentJoined", handleStudentJoined);
+      socket.off("studentLeft", handleStudentLeft);
+      socket.emit("leaveSession", { sessionId });
     };
-  }, [socket]);
+  }, [
+    socket,
+    sessionId,
+    isConnected,
+    handleQuizStarted,
+    handleStudentJoined,
+    handleStudentLeft,
+  ]);
 
   return (
     <main className="students_list_card">
@@ -116,22 +84,35 @@ export default function StudentsComponent() {
       <div
         className="connection-status"
         style={{
-          padding: "8px",
+          padding: "8px 16px",
           borderRadius: "16px",
           marginBottom: "16px",
           color: "#111111",
           textAlign: "center",
           border: "2px solid #111111",
+          background: isConnected ? "#d4edda" : "#f8d7da",
+          fontWeight: "bold",
         }}
       >
-        Holat: {isConnected ? "Ulangan" : "Ulanmagan"} | O'quvchilar soni:{" "}
+        📶 Holat: {isConnected ? "Ulangan" : "Ulanmagan"} | 👥 O'quvchilar soni:{" "}
         {studentsArray.length}
+        {!isConnected && (
+          <div
+            style={{ fontSize: "12px", marginTop: "4px", fontWeight: "normal" }}
+          >
+            Serverga ulanmoqda...
+          </div>
+        )}
       </div>
 
       <div>
         <StudentsListComponent students={studentsArray} />
       </div>
-      <TitleComponent style={{ width: "30%" }} text="Biroz kuting" />
+
+      <TitleComponent
+        style={{ width: "30%", marginTop: "20px" }}
+        text="Biroz kuting"
+      />
     </main>
   );
 }

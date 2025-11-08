@@ -33,6 +33,7 @@ export default function StudentsListDashboardComponent() {
   async function handleStart() {
     await api.get(`/session/${sessionId}/session`);
     socket?.emit("startQuiz", { sessionId });
+    console.log("event emitted");
   }
 
   const code = params.get("code");
@@ -46,15 +47,6 @@ export default function StudentsListDashboardComponent() {
       setStudentsList([]);
     }
   }
-  useEffect(() => {
-    const socket = io(process.env.BACK_END_URL || "http://localhost:7000");
-
-    socket.on("quiz_started", (data) => {
-      return () => {
-        socket.disconnect();
-      };
-    });
-  }, []);
 
   useEffect(() => {
     if (sessionId) {
@@ -105,12 +97,20 @@ export default function StudentsListDashboardComponent() {
       );
     });
 
+    socket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+      toaster.error("Connection lost. Trying to reconnect...");
+    });
+
     return () => {
-      console.log("Cleaning up socket listeners");
+      console.log("Cleaning up socket listeners for session:", sessionId);
+      socket.off("quizStarted");
       socket.off("studentJoined");
       socket.off("studentLeft");
       socket.off("connect_error");
-      socket.emit("leaveSession", sessionId);
+      if (sessionId) {
+        socket.emit("leaveSession", { sessionId });
+      }
     };
   }, [socket, sessionId]);
 
@@ -145,9 +145,7 @@ export default function StudentsListDashboardComponent() {
             />
             <button
               className="code_card_wrapper-button"
-              onClick={() => {
-                handleStart();
-              }}
+              onClick={() => handleStart()}
             >
               Boshlash
             </button>
