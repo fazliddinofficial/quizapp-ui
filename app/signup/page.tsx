@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import "./signup.css";
 import Link from "next/link";
-import api from "../../api/route";
+import api from "../../lib/api";
 import { toaster } from "../../lib/toaster";
 import { useRouter } from "next/navigation";
 

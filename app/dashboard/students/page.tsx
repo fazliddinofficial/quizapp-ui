@@ -1,15 +1,15 @@
 "use client";
+
 import SideBar from "@/app/sidebar/sidebar";
 import { TitleComponent } from "@/app/student/code/page";
 import "./style.css";
 import StudentsListComponent from "@/app/student/students-card/students-card-component";
 import { useEffect, useState } from "react";
 import { toaster } from "@/lib/toaster";
-import api from "@/api/route";
+import api from "@/lib/api";
 import { useSearchParams } from "next/navigation";
 import { useSocket } from "@/lib/socketContext";
 import { useRouter } from "next/navigation";
-import { io } from "socket.io-client";
 
 interface Student {
   _id: string;

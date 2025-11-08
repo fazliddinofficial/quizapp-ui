@@ -5,7 +5,7 @@ import StudentsListComponent from "../students-card/students-card-component";
 import "./index.css";
 import { toaster } from "@/lib/toaster";
 import { useEffect, useState, useCallback } from "react";
-import api from "@/api/route";
+import api from "@/lib/api";
 import { useSocket } from "@/lib/socketContext";
 import { useRouter } from "next/navigation";
 

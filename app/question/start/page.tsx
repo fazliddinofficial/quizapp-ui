@@ -3,7 +3,7 @@ import { TitleComponent } from "@/app/student/code/page";
 import "./style.css";
 import { toaster } from "@/lib/toaster";
 import { useEffect, useState } from "react";
-import api from "@/api/route";
+import api from "@/lib/api";
 import { useSearchParams } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 

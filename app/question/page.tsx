@@ -5,7 +5,7 @@ import { useState } from "react";
 import "./question.css";
 import { GoChevronDown } from "react-icons/go";
 import { toaster } from "../../lib/toaster";
-import api from "../../api/route";
+import api from "../../lib/api";
 
 export default function CreateQuestionComponent() {
   const lettersArray = ["A", "B", "C", "D"];

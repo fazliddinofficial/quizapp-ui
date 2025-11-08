@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import SideBar from "../sidebar/sidebar";
 import "./control.css";
 import { toaster } from "../../lib/toaster";
-import api from "../../api/route";
+import api from "../../lib/api";
 import { useRouter } from "next/navigation";
 
 export default function ControlPage() {
