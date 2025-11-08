@@ -8,6 +8,8 @@ import { toaster } from "@/app/lib/toaster";
 import api from "@/app/api/route";
 import { useSearchParams } from "next/navigation";
 import { useSocket } from "@/app/lib/socketContext";
+import { useRouter } from "next/navigation";
+import { io } from "socket.io-client";
 
 interface Student {
   _id: string;
@@ -17,11 +19,23 @@ interface Student {
 
 export default function StudentsListDashboardComponent() {
   const params = useSearchParams();
-  const [studentsList, setStudentsList] = useState<string[]>([]);
+  const router = useRouter();
+  const sessionId = params.get("sessionId");
+  const [studentsList, setStudentsList] = useState<Student[]>([]);
   const { socket, isConnected } = useSocket();
 
+  function arrangeStudentsName(): string[] {
+    return studentsList.map((v) => {
+      return v.fullName;
+    });
+  }
+
+  async function handleStart() {
+    await api.get(`/session/${sessionId}/session`);
+    socket?.emit("startQuiz", { sessionId });
+  }
+
   const code = params.get("code");
-  const sessionId = params.get("sessionId");
 
   async function fetchStudents() {
     try {
@@ -32,6 +46,15 @@ export default function StudentsListDashboardComponent() {
       setStudentsList([]);
     }
   }
+  useEffect(() => {
+    const socket = io(process.env.BACK_END_URL || "http://localhost:7000");
+
+    socket.on("quiz_started", (data) => {
+      return () => {
+        socket.disconnect();
+      };
+    });
+  }, []);
 
   useEffect(() => {
     if (sessionId) {
@@ -42,36 +65,72 @@ export default function StudentsListDashboardComponent() {
   useEffect(() => {
     if (!socket || !sessionId) return;
 
-    // Join the session room
     socket.emit("joinSession", sessionId);
 
-    // Listen for new student joined events - now expecting just the student name (string)
-    socket.on("studentJoined", (studentName: string) => {
-      setStudentsList((prev) => {
-        // Avoid duplicates - make sure we always return an array of strings
-        if (prev.includes(studentName)) {
-          return prev;
-        }
-        return [...prev, studentName];
-      });
-      toaster.success(`${studentName} joined the session`);
+    socket.on("studentJoined", (studentData: Student | string) => {
+      if (typeof studentData === "string") {
+        const newStudent: Student = {
+          _id: Date.now().toString(),
+          fullName: studentData,
+          uniqueCode: String(new Date().getTime()),
+        };
+        setStudentsList((prev) => {
+          if (prev.some((student) => student.fullName === studentData)) {
+            return prev;
+          }
+          return [...prev, newStudent];
+        });
+        toaster.success(`${studentData} joined the session`);
+      } else {
+        setStudentsList((prev) => {
+          if (
+            prev.some(
+              (student) =>
+                student._id === studentData._id ||
+                student.fullName === studentData.fullName
+            )
+          ) {
+            return prev;
+          }
+          return [...prev, studentData];
+        });
+        toaster.success(`${studentData.fullName} joined the session`);
+      }
     });
 
-    // Listen for student left events if needed
     socket.on("studentLeft", (studentName: string) => {
-      setStudentsList((prev) => prev.filter((name) => name !== studentName));
+      console.log("Student left:", studentName);
+      setStudentsList((prev) =>
+        prev.filter((student) => student.fullName !== studentName)
+      );
     });
 
-    // Cleanup listeners
     return () => {
+      console.log("Cleaning up socket listeners");
       socket.off("studentJoined");
       socket.off("studentLeft");
+      socket.off("connect_error");
       socket.emit("leaveSession", sessionId);
     };
   }, [socket, sessionId]);
 
   return (
     <main>
+      <div
+        style={{
+          position: "fixed",
+          top: 10,
+          right: 10,
+          padding: "5px 10px",
+          background: isConnected ? "green" : "red",
+          color: "white",
+          borderRadius: "4px",
+          zIndex: 1000,
+        }}
+      >
+        {isConnected ? "Connected" : "Disconnected"}
+      </div>
+
       <div className="sidebar_wrapper">
         <SideBar />
       </div>
@@ -84,10 +143,17 @@ export default function StudentsListDashboardComponent() {
               style={{ width: "300px", minHeight: "200px" }}
               text={String(code)}
             />
-            <button className="code_card_wrapper-button">Boshlash</button>
+            <button
+              className="code_card_wrapper-button"
+              onClick={() => {
+                handleStart();
+              }}
+            >
+              Boshlash
+            </button>
           </div>
           <StudentsListComponent
-            students={studentsList}
+            students={arrangeStudentsName()}
             style={{ width: "30%", maxHeight: "600px" }}
           />
         </div>

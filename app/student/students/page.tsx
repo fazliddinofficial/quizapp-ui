@@ -7,12 +7,14 @@ import { toaster } from "@/app/lib/toaster";
 import { useEffect, useState } from "react";
 import api from "@/app/api/route";
 import { io, Socket } from "socket.io-client";
+import { useRouter } from "next/navigation";
 
 export default function StudentsComponent() {
   const searchParam = useSearchParams();
   const [studentsArray, setStudentsArray] = useState<string[]>([]);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const router = useRouter();
 
   const sessionId = searchParam.get("sessionId");
 
@@ -37,12 +39,10 @@ export default function StudentsComponent() {
   useEffect(() => {
     if (!sessionId) return;
 
-    const socketInstance = io(
-      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:7000",
-      {
-        transports: ["websocket", "polling"],
-      }
-    );
+    const socketInstance = io(process.env.BACK_END_URL, {
+      transports: ["websocket", "polling"],
+      withCredentials: true,
+    });
 
     socketInstance.on("connect", () => {
       console.log("✅ Connected to server");
@@ -97,6 +97,17 @@ export default function StudentsComponent() {
       socket.emit("leaveSession", sessionId);
     };
   }, [socket, sessionId]);
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("quizStarted", (data) => {
+      toaster.success(data.message);
+      router.push(`/question/start?sessionId=${data.sessionId}`);
+    });
+
+    return () => {
+      socket.off("quizStarted");
+    };
+  }, [socket]);
 
   return (
     <main className="students_list_card">
