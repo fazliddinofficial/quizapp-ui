@@ -44,7 +44,7 @@ export default function CreateQuestionComponent() {
       if (res.data.success === true) {
         toaster.success("Quiz boshlandi!");
         router.push(
-          `/dashboard/students?sessionId=${res.data.sessionId}&code=${res.data.code}`
+          `/students?sessionId=${res.data.sessionId}&code=${res.data.code}`
         );
       }
     } catch (error: any) {
