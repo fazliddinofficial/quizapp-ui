@@ -1,52 +1,71 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { io, Socket } from "socket.io-client";
 
 interface SocketContextType {
-  socket: Socket | null;
+  socket: Socket;
   isConnected: boolean;
 }
 
-const SocketContext = createContext<SocketContextType>({
-  socket: null,
-  isConnected: false,
-});
+const SocketContext = createContext<SocketContextType | null>(null);
 
-export const useSocket = () => useContext(SocketContext);
+export const useSocket = () => {
+  const context = useContext(SocketContext);
+  if (!context) {
+    throw new Error("useSocket must be used within SocketProvider");
+  }
+  return context;
+};
 
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  useEffect(() => {
-    const socketInstance = io(
-      process.env.BACK_END_URL || "http://localhost:7000",
-      {
-        transports: ["websocket", "polling"],
-      }
-    );
+  // Create socket instance once with useMemo
+  const socket = useMemo(() => {
+    return io(process.env.BACK_END_URL || "http://localhost:7000", {
+      transports: ["websocket", "polling"],
+    });
+  }, []);
 
-    socketInstance.on("connect", () => {
+  useEffect(() => {
+    // Set up event listeners
+    socket.on("connect", () => {
       setIsConnected(true);
       console.log("Connected to server");
     });
 
-    socketInstance.on("disconnect", () => {
+    socket.on("disconnect", () => {
       setIsConnected(false);
       console.log("Disconnected from server");
     });
 
-    setSocket(socketInstance);
-
+    // Cleanup function
     return () => {
-      socketInstance.disconnect();
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.disconnect();
     };
-  }, []);
+  }, [socket]);
+
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      socket,
+      isConnected,
+    }),
+    [socket, isConnected]
+  );
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
+    <SocketContext.Provider value={contextValue}>
       {children}
     </SocketContext.Provider>
   );

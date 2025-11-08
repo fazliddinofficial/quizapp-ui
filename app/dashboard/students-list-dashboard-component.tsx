@@ -18,9 +18,10 @@ interface Student {
 
 export default async function StudentsListDashboardComponent() {
   const params = useSearchParams();
-  const sessionId = params.get("sessionId");
   const [studentsList, setStudentsList] = useState<Student[]>([]);
   const { socket, isConnected } = useSocket();
+  const sessionId = params.get("sessionId");
+  const code = params.get("code");
 
   function arrangeStudentsName(): string[] {
     return studentsList.map((v) => {
@@ -33,8 +34,6 @@ export default async function StudentsListDashboardComponent() {
     socket?.emit("startQuiz", { sessionId });
     console.log("event emitted");
   }
-
-  const code = params.get("code");
 
   async function fetchStudents() {
     try {

@@ -17,19 +17,17 @@ export default function StudentsComponent() {
 
   const sessionId = searchParam.get("sessionId");
 
-  const fetchData = async () => {
-    if (!sessionId) {
-      toaster.error("Quiz topilmadi");
-      return;
-    }
+  const fetchData = useCallback(async () => {
+    if (!sessionId) return;
 
     try {
-      const response = await api.get(`/session/${sessionId}/students`);
-      setStudentsArray(response.data || []);
+      const req = await api.get(`/session/${sessionId}/students`);
+      setStudentsArray(req.data || []);
     } catch (error: any) {
-      toaster.error(error.response?.data?.message || "Serverda nosozlik!");
+      toaster.error(error.response?.data?.message);
+      setStudentsArray([]);
     }
-  };
+  }, [sessionId]);
 
   const handleQuizStarted = useCallback(
     (data: any) => {
@@ -47,14 +45,16 @@ export default function StudentsComponent() {
     toaster.success(`${studentName} sessiyaga qo'shildi`);
   }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   const handleStudentLeft = useCallback((studentName: string) => {
     setStudentsArray((prev) => prev.filter((name) => name !== studentName));
   }, []);
 
   useEffect(() => {
     if (!socket || !sessionId || !isConnected) return;
-
-    fetchData();
 
     socket.emit("joinSession", { sessionId });
 
