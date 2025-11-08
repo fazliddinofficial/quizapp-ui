@@ -4,10 +4,10 @@ import { TitleComponent } from "@/app/student/code/page";
 import "./style.css";
 import StudentsListComponent from "@/app/student/students-card/students-card-component";
 import { useEffect, useState } from "react";
-import { toaster } from "@/app/lib/toaster";
-import api from "@/app/api/route";
+import { toaster } from "@/lib/toaster";
+import api from "@/api/route";
 import { useSearchParams } from "next/navigation";
-import { useSocket } from "@/app/lib/socketContext";
+import { useSocket } from "@/lib/socketContext";
 import { useRouter } from "next/navigation";
 import { io } from "socket.io-client";
 

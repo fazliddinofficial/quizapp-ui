@@ -1,9 +1,9 @@
 "use client";
 import { TitleComponent } from "@/app/student/code/page";
 import "./style.css";
-import { toaster } from "@/app/lib/toaster";
+import { toaster } from "@/lib/toaster";
 import { useEffect, useState } from "react";
-import api from "@/app/api/route";
+import api from "@/api/route";
 import { useSearchParams } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 

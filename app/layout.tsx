@@ -1,7 +1,7 @@
 "use client";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import { SocketProvider } from "./lib/socketContext";
+import { SocketProvider } from "../lib/socketContext";
 
 export default function RootLayout({
   children,

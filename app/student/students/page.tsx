@@ -3,10 +3,10 @@ import { useSearchParams } from "next/navigation";
 import { TitleComponent } from "../code/page";
 import StudentsListComponent from "../students-card/students-card-component";
 import "./index.css";
-import { toaster } from "@/app/lib/toaster";
+import { toaster } from "@/lib/toaster";
 import { useEffect, useState, useCallback } from "react";
-import api from "@/app/api/route";
-import { useSocket } from "@/app/lib/socketContext";
+import api from "@/api/route";
+import { useSocket } from "@/lib/socketContext";
 import { useRouter } from "next/navigation";
 
 export default function StudentsComponent() {

@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import "./signup.css";
 import Link from "next/link";
-import api from "../api/route";
-import { toaster } from "../lib/toaster";
+import api from "../../api/route";
+import { toaster } from "../../lib/toaster";
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {

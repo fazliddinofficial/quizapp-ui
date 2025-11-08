@@ -3,8 +3,8 @@
 import React, { FormEvent, useState } from "react";
 import { TitleComponent } from "../code/page";
 import { useSearchParams } from "next/navigation";
-import api from "@/app/api/route";
-import { toaster } from "@/app/lib/toaster";
+import api from "@/api/route";
+import { toaster } from "@/lib/toaster";
 import { useRouter } from "next/navigation";
 
 export default function NameComponent() {
